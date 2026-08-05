@@ -1,0 +1,8 @@
+# Foundry build artifacts and dependencies (reinstalled via forge install / forge build)
+out/
+cache/
+lib/
+broadcast/
+
+# Secrets
+.env
