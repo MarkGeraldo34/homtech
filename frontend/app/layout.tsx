@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <header className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <nav className="flex items-center gap-6 text-sm font-medium">
               <Link href="/" className="flex items-center gap-2 font-semibold">
-                <Image src="/logo.png" alt="HomTech" width={28} height={28} className="rounded-full" />
+                <Image src="/logo.png" alt="HomTech" width={28} height={28} />
                 HomTech
               </Link>
               <Link href="/lend">Lend</Link>
