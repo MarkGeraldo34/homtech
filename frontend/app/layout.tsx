@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Image from "next/image";
 import Link from "next/link";
 import { ConnectButton } from "@/components/ConnectButton";
 import { Providers } from "./providers";
@@ -27,7 +28,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <header className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <nav className="flex items-center gap-6 text-sm font-medium">
-              <Link href="/" className="font-semibold">
+              <Link href="/" className="flex items-center gap-2 font-semibold">
+                <Image src="/logo.png" alt="HomTech" width={28} height={28} className="rounded-full" />
                 HomTech
               </Link>
               <Link href="/lend">Lend</Link>
