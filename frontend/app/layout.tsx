@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { ConnectButton } from "@/components/ConnectButton";
-import { NavLinks } from "@/components/NavLinks";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -42,7 +41,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Image src="/logo.png" alt="HomTech" width={28} height={28} />
                 HomTech
               </Link>
-              <NavLinks />
             </nav>
             <ConnectButton />
           </header>
