@@ -28,12 +28,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Providers>
           <header className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <nav className="flex items-center gap-6 text-sm font-medium">
-              <Link href="/" className="flex items-center gap-2 font-semibold">
+              <Link href="/" className="flex items-center gap-2 py-3 font-semibold">
                 <Image src="/logo.png" alt="HomTech" width={28} height={28} />
                 HomTech
               </Link>
-              <Link href="/lend">Lend</Link>
-              <Link href="/borrow">Borrow</Link>
+              <Link href="/lend" className="py-3">Lend</Link>
+              <Link href="/borrow" className="py-3">Borrow</Link>
             </nav>
             <ConnectButton />
           </header>
