@@ -30,23 +30,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Image
             src="/backgrounds/house-1.jpg"
             alt=""
-            width={600}
-            height={400}
-            className="absolute -top-10 -left-16 w-[34rem] h-auto object-cover grayscale opacity-[0.06]"
-          />
-          <Image
-            src="/backgrounds/house-2.jpg"
-            alt=""
-            width={600}
-            height={450}
-            className="absolute -top-16 right-[-10rem] w-[38rem] h-auto object-cover grayscale opacity-[0.06]"
-          />
-          <Image
-            src="/backgrounds/house-3.jpg"
-            alt=""
-            width={600}
-            height={400}
-            className="absolute bottom-[-8rem] left-1/3 w-[40rem] h-auto object-cover grayscale opacity-[0.05]"
+            fill
+            priority
+            className="object-cover grayscale opacity-[0.06]"
           />
         </div>
         <Providers>
