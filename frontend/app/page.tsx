@@ -32,11 +32,6 @@ export default function Home() {
           Borrow
         </Link>
       </div>
-      <div className="rounded-md border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-700 dark:text-amber-400">
-        Testnet only. Loans are USDC on Arc Testnet; collateral is locked on Ethereum Sepolia, not
-        real mainnet — see the project README for how eligibility checks relate to your real
-        mainnet NFT.
-      </div>
     </div>
   );
 }
