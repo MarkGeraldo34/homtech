@@ -210,7 +210,7 @@ export default function BorrowPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold mb-2">Borrow</h1>
-        <p className="text-gray-600 text-sm">
+        <p className="text-muted text-sm">
           Borrow up to a tier&apos;s worth of USDC as a 30-day loan, gated by real cross-chain
           wallet activity and an Ethereum-mainnet NFT you own, and collateralized by a matching
           NFT locked on Ethereum Sepolia.
@@ -218,38 +218,42 @@ export default function BorrowPage() {
       </div>
 
       {!isConnected ? (
-        <p className="text-sm text-gray-500">Connect your wallet to borrow.</p>
+        <p className="text-sm text-muted">Connect your wallet to borrow.</p>
       ) : hasActiveLoan && loan ? (
-        <div className="space-y-4 rounded-md border border-gray-200 p-4">
+        <div className="space-y-4 rounded-lg border border-border bg-surface p-4">
           <h2 className="font-medium">Active loan #{activeLoanId?.toString()}</h2>
           <dl className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <dt className="text-gray-500">Tier</dt>
+              <dt className="text-muted">Tier</dt>
               <dd>{TIER_LABELS[loan[1]]}</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Principal</dt>
+              <dt className="text-muted">Principal</dt>
               <dd className="font-mono">{formatUnits(loan[2], 6)} USDC</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Due</dt>
+              <dt className="text-muted">Due</dt>
               <dd>{new Date(Number(loan[4]) * 1000).toLocaleString()}</dd>
             </div>
           </dl>
-          <button onClick={repayLoan} disabled={isPending} className="rounded-md bg-black px-4 py-2 text-sm text-white disabled:opacity-50">
+          <button
+            onClick={repayLoan}
+            disabled={isPending}
+            className="rounded-md bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-sm text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+          >
             Repay {formatUnits(loan[2], 6)} USDC
           </button>
         </div>
       ) : (
         <div className="space-y-8">
-          <div>
+          <div className="rounded-lg border border-border bg-surface p-4">
             <h2 className="font-medium mb-2">1. Choose a tier</h2>
             <TierPicker value={tier} onChange={setTier} />
           </div>
 
-          <div>
+          <div className="rounded-lg border border-border bg-surface p-4">
             <h2 className="font-medium mb-2">2. Your Ethereum mainnet NFT (eligibility)</h2>
-            <p className="text-xs text-gray-500 mb-2">
+            <p className="text-xs text-muted mb-2">
               Read only — never locked. Must be worth more than {TIER_LABELS[tier]} and held 6+
               months.
             </p>
@@ -258,25 +262,31 @@ export default function BorrowPage() {
                 value={mainnetNftContract}
                 onChange={(e) => setMainnetNftContract(e.target.value)}
                 placeholder="NFT contract address (0x…)"
-                className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm font-mono"
+                className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono focus:border-accent"
               />
               <input
                 value={mainnetTokenId}
                 onChange={(e) => setMainnetTokenId(e.target.value)}
                 placeholder="Token ID"
-                className="w-32 rounded-md border border-gray-300 px-3 py-2 text-sm font-mono"
+                className="w-32 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono focus:border-accent"
               />
             </div>
             <button
               onClick={checkEligibility}
               disabled={eligibilityLoading || !mainnetNftContract || !mainnetTokenId}
-              className="mt-2 rounded-md border border-gray-300 px-4 py-2 text-sm disabled:opacity-50"
+              className="mt-2 rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
             >
               {eligibilityLoading ? "Checking…" : "Check eligibility"}
             </button>
-            {eligibilityError && <p className="mt-2 text-sm text-red-600">{eligibilityError}</p>}
+            {eligibilityError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{eligibilityError}</p>}
             {eligibility && (
-              <div className={`mt-2 rounded-md border p-3 text-sm ${eligibility.eligible ? "border-green-200 bg-green-50" : "border-red-200 bg-red-50"}`}>
+              <div
+                className={`mt-2 rounded-md border p-3 text-sm ${
+                  eligibility.eligible
+                    ? "border-green-500/30 bg-green-500/10 text-green-700 dark:text-green-400"
+                    : "border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-400"
+                }`}
+              >
                 <p className="font-medium">{eligibility.eligible ? "Eligible" : "Not eligible"}</p>
                 {eligibility.reasons.length > 0 && (
                   <ul className="mt-1 list-disc pl-4">
@@ -289,9 +299,9 @@ export default function BorrowPage() {
             )}
           </div>
 
-          <div>
+          <div className="rounded-lg border border-border bg-surface p-4">
             <h2 className="font-medium mb-2">3. Lock collateral on Sepolia</h2>
-            <p className="text-xs text-gray-500 mb-2">
+            <p className="text-xs text-muted mb-2">
               An NFT you own on Ethereum Sepolia — this is what actually gets locked and, if you
               default, seized.
             </p>
@@ -300,47 +310,53 @@ export default function BorrowPage() {
                 value={sepoliaNftContract}
                 onChange={(e) => setSepoliaNftContract(e.target.value)}
                 placeholder="Sepolia NFT contract address (0x…)"
-                className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm font-mono"
+                className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono focus:border-accent"
               />
               <input
                 value={sepoliaTokenId}
                 onChange={(e) => setSepoliaTokenId(e.target.value)}
                 placeholder="Token ID"
-                className="w-32 rounded-md border border-gray-300 px-3 py-2 text-sm font-mono"
+                className="w-32 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono focus:border-accent"
               />
             </div>
             <button
               onClick={lockCollateral}
               disabled={!eligibility?.eligible || locking || !sepoliaNftContract || !sepoliaTokenId}
-              className="mt-2 rounded-md border border-gray-300 px-4 py-2 text-sm disabled:opacity-50"
+              className="mt-2 rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
             >
               {locking ? "Approving + locking…" : "Approve + Lock NFT"}
             </button>
-            {lockError && <p className="mt-2 text-sm text-red-600">{lockError}</p>}
-            {depositId && <p className="mt-2 text-sm text-green-600 font-mono break-all">Locked. depositId: {depositId}</p>}
+            {lockError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{lockError}</p>}
+            {depositId && (
+              <p className="mt-2 text-sm text-green-600 dark:text-green-400 font-mono break-all">Locked. depositId: {depositId}</p>
+            )}
           </div>
 
-          <div>
+          <div className="rounded-lg border border-border bg-surface p-4">
             <h2 className="font-medium mb-2">4. Get attestation + claim loan</h2>
             <button
               onClick={requestAttestation}
               disabled={!depositId || attestationLoading}
-              className="rounded-md border border-gray-300 px-4 py-2 text-sm disabled:opacity-50"
+              className="rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
             >
               {attestationLoading ? "Requesting…" : "Request attestation"}
             </button>
             {attestationResult && !attestationResult.eligible && (
-              <p className="mt-2 text-sm text-red-600">{attestationResult.error || attestationResult.reasons?.join("; ")}</p>
+              <p className="mt-2 text-sm text-red-600 dark:text-red-400">{attestationResult.error || attestationResult.reasons?.join("; ")}</p>
             )}
             {attestationResult?.attestation && (
-              <button onClick={claimLoan} disabled={isPending} className="mt-2 ml-2 rounded-md bg-black px-4 py-2 text-sm text-white disabled:opacity-50">
+              <button
+                onClick={claimLoan}
+                disabled={isPending}
+                className="mt-2 ml-2 rounded-md bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-sm text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
                 Pay 15% interest + claim {TIER_LABELS[tier]}
               </button>
             )}
           </div>
 
-          {isConfirmed && <p className="text-sm text-green-600">Last transaction confirmed.</p>}
-          {writeError && <p className="text-sm text-red-600">{writeError.message}</p>}
+          {isConfirmed && <p className="text-sm text-green-600 dark:text-green-400">Last transaction confirmed.</p>}
+          {writeError && <p className="text-sm text-red-600 dark:text-red-400">{writeError.message}</p>}
         </div>
       )}
     </div>

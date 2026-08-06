@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { ConnectButton } from "@/components/ConnectButton";
+import { NavLinks } from "@/components/NavLinks";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -26,14 +27,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <Providers>
-          <header className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+          <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur px-6 py-4 flex items-center justify-between">
             <nav className="flex items-center gap-6 text-sm font-medium">
               <Link href="/" className="flex items-center gap-2 py-3 font-semibold">
                 <Image src="/logo.png" alt="HomTech" width={28} height={28} />
                 HomTech
               </Link>
-              <Link href="/lend" className="py-3">Lend</Link>
-              <Link href="/borrow" className="py-3">Borrow</Link>
+              <NavLinks />
             </nav>
             <ConnectButton />
           </header>

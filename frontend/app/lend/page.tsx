@@ -122,7 +122,7 @@ export default function LendPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-semibold mb-2">Lend</h1>
-        <p className="text-gray-600 text-sm">
+        <p className="text-muted text-sm">
           Deposit USDC into a tier pool. Your share earns RENT tokens for every day a loan in that
           tier is outstanding, streaming continuously until it&apos;s repaid.
         </p>
@@ -131,20 +131,20 @@ export default function LendPage() {
       <TierPicker value={tier} onChange={setTier} />
 
       {!isConnected ? (
-        <p className="text-sm text-gray-500">Connect your wallet on Arc Testnet to lend.</p>
+        <p className="text-sm text-muted">Connect your wallet on Arc Testnet to lend.</p>
       ) : (
         <div className="space-y-6">
-          <dl className="grid grid-cols-2 gap-4 text-sm">
+          <dl className="grid grid-cols-2 gap-4 rounded-lg border border-border bg-surface p-4 text-sm">
             <div>
-              <dt className="text-gray-500">Your deposit ({TIER_LABELS[tier]} pool)</dt>
+              <dt className="text-muted">Your deposit ({TIER_LABELS[tier]} pool)</dt>
               <dd className="font-mono">{formatUnits(deposited, USDC_DECIMALS)} USDC</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Pending rewards</dt>
+              <dt className="text-muted">Pending rewards</dt>
               <dd className="font-mono">{Number(formatUnits(pending, 18)).toFixed(4)} RENT</dd>
             </div>
             <div>
-              <dt className="text-gray-500">Idle pool liquidity</dt>
+              <dt className="text-muted">Idle pool liquidity</dt>
               <dd className="font-mono">{formatUnits(idleLiquidity ?? 0n, USDC_DECIMALS)} USDC</dd>
             </div>
           </dl>
@@ -157,15 +157,23 @@ export default function LendPage() {
                 min="0"
                 value={depositAmount}
                 onChange={(e) => setDepositAmount(e.target.value)}
-                className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm"
+                className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-accent"
                 placeholder="0.00"
               />
               {needsApproval ? (
-                <button onClick={approve} disabled={isPending} className="rounded-md bg-black px-4 py-2 text-sm text-white disabled:opacity-50">
+                <button
+                  onClick={approve}
+                  disabled={isPending}
+                  className="rounded-md bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-sm text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+                >
                   Approve
                 </button>
               ) : (
-                <button onClick={deposit} disabled={isPending || !depositAmount} className="rounded-md bg-black px-4 py-2 text-sm text-white disabled:opacity-50">
+                <button
+                  onClick={deposit}
+                  disabled={isPending || !depositAmount}
+                  className="rounded-md bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-sm text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+                >
                   Deposit
                 </button>
               )}
@@ -180,10 +188,14 @@ export default function LendPage() {
                 min="0"
                 value={withdrawAmount}
                 onChange={(e) => setWithdrawAmount(e.target.value)}
-                className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm"
+                className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-accent"
                 placeholder="0.00"
               />
-              <button onClick={withdraw} disabled={isPending || !withdrawAmount} className="rounded-md border border-gray-300 px-4 py-2 text-sm disabled:opacity-50">
+              <button
+                onClick={withdraw}
+                disabled={isPending || !withdrawAmount}
+                className="rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+              >
                 Withdraw
               </button>
             </div>
@@ -192,15 +204,15 @@ export default function LendPage() {
           <button
             onClick={claimRewards}
             disabled={isPending || pending === 0n}
-            className="rounded-md border border-gray-300 px-4 py-2 text-sm disabled:opacity-50"
+            className="rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
           >
             Claim {Number(formatUnits(pending, 18)).toFixed(4)} RENT
           </button>
 
-          {isPending && <p className="text-sm text-gray-500">Confirm in wallet…</p>}
-          {isConfirming && <p className="text-sm text-gray-500">Waiting for confirmation…</p>}
-          {isConfirmed && <p className="text-sm text-green-600">Confirmed.</p>}
-          {writeError && <p className="text-sm text-red-600">{writeError.message}</p>}
+          {isPending && <p className="text-sm text-muted">Confirm in wallet…</p>}
+          {isConfirming && <p className="text-sm text-muted">Waiting for confirmation…</p>}
+          {isConfirmed && <p className="text-sm text-green-600 dark:text-green-400">Confirmed.</p>}
+          {writeError && <p className="text-sm text-red-600 dark:text-red-400">{writeError.message}</p>}
         </div>
       )}
     </div>

@@ -9,8 +9,10 @@ export function TierPicker({ value, onChange }: { value: number; onChange: (tier
         <button
           key={label}
           onClick={() => onChange(index)}
-          className={`rounded-md border px-3 py-1.5 text-sm font-medium ${
-            value === index ? "border-black bg-black text-white" : "border-gray-300 text-gray-700"
+          className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
+            value === index
+              ? "border-transparent bg-gradient-to-r from-accent to-accent-2 text-white"
+              : "border-border text-foreground hover:border-accent hover:text-accent"
           }`}
         >
           {label}
