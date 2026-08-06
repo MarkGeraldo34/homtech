@@ -22,20 +22,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --surface: #151318;
-    --border: #2a2732;
-    --muted: #9ca3af;
-    --accent: #b465ff;
-    --accent-2: #4fb2ff;
-  }
-}
-
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image:
+    radial-gradient(650px circle at 12% 8%, color-mix(in srgb, var(--accent) 7%, transparent), transparent 60%),
+    radial-gradient(650px circle at 88% 12%, color-mix(in srgb, var(--accent-2) 7%, transparent), transparent 60%);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
