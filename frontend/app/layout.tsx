@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "HomTech",
-  description: "NFT-collateralized rent lending on Arc Testnet",
+  description: "NFT-collateralized house rent lending on Arc Testnet",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -36,9 +36,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         </div>
         <Providers>
-          <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur px-6 py-4 flex items-center justify-between">
-            <nav className="flex items-center gap-6 text-sm font-medium">
-              <Link href="/" className="flex items-center gap-2 py-3 font-semibold">
+          <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur px-4 sm:px-6 py-4 flex items-center justify-between gap-2">
+            <nav className="flex items-center gap-3 sm:gap-6 text-sm font-medium">
+              <Link href="/" className="flex items-center gap-2 py-3 font-semibold whitespace-nowrap">
                 <Image src="/logo.png" alt="HomTech" width={28} height={28} />
                 HomTech
               </Link>

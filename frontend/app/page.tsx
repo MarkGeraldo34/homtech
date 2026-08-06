@@ -7,7 +7,7 @@ export default function Home() {
         Arc Testnet
       </span>
       <h1 className="text-3xl font-semibold tracking-tight">
-        NFT-collateralized{" "}
+        NFT-collateralized <span className="text-accent">house</span>{" "}
         <span className="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">
           rent lending
         </span>
