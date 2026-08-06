@@ -12,13 +12,14 @@ import {RewardToken} from "./RewardToken.sol";
 /// @title LendingPool
 /// @notice NFT-collateral-gated USDC "rent" lending on Arc Testnet. Borrowers draw a fixed-tier
 ///         30-day loan after an off-chain oracle attests to their eligibility (cross-chain wallet
-///         volume + a mainnet NFT's value/age) and they've locked a collateral NFT in the
-///         companion CollateralVault on Ethereum Sepolia. Lenders fund a shared pool per tier and
-///         earn a streaming RewardToken for as long as loans backed by that tier are outstanding.
-/// @dev Collateral custody and seizure happen on the Sepolia vault, driven by an off-chain relayer
-///      that watches this contract's LoanRepaid/LoanDefaulted events. This contract never touches
-///      the NFT directly — it only carries the reference (nftContract/tokenId/sepoliaDepositId) so
-///      the relayer knows which Sepolia deposit to unlock or seize.
+///         volume + a mainnet NFT's value/age) and locked that *same* NFT as collateral in the
+///         companion CollateralVault — currently on Ethereum Sepolia while Arc is still testnet,
+///         eventually Ethereum mainnet. Lenders fund a shared pool per tier and earn a streaming
+///         RewardToken for as long as loans backed by that tier are outstanding.
+/// @dev Collateral custody and seizure happen on the vault, driven by an off-chain relayer that
+///      watches this contract's LoanRepaid/LoanDefaulted events. This contract never touches the
+///      NFT directly — it only carries the reference (nftContract/tokenId/sepoliaDepositId) so
+///      the relayer knows which deposit to unlock or seize.
 contract LendingPool is Ownable, ReentrancyGuard, EIP712 {
     using SafeERC20 for IERC20;
 
@@ -54,7 +55,7 @@ contract LendingPool is Ownable, ReentrancyGuard, EIP712 {
         uint256 activeLoanCount;
         uint256 accRewardPerShare; // scaled 1e18, per unit of totalDeposits
         uint256 lastUpdateTs;
-        address treasury; // Sepolia-side address seized NFTs for this tier are sent to (informational; consumed by the relayer)
+        address treasury; // vault-side address seized NFTs for this tier are sent to (informational; consumed by the relayer)
     }
 
     struct LenderInfo {
@@ -325,7 +326,7 @@ contract LendingPool is Ownable, ReentrancyGuard, EIP712 {
 
     /// @notice Callable by anyone once a loan is past due and unpaid. Blacklists the borrower and
     ///         socializes the unpaid principal as a loss to the tier pool's lenders (the seized
-    ///         collateral, relayed to the Sepolia vault, is the offsetting recovery).
+    ///         collateral, relayed to the vault, is the offsetting recovery).
     function markDefault(uint256 loanId) external nonReentrant {
         Loan storage l = loans[loanId];
         if (!l.active) revert LoanNotActive();

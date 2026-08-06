@@ -37,13 +37,11 @@ export default function BorrowPage() {
   const { address, isConnected } = useAccount();
   const [tier, setTier] = useState(0);
 
-  // The real Ethereum-mainnet NFT used for the eligibility check (read-only — never locked).
+  // The borrower's real Ethereum-mainnet NFT — checked for eligibility, then locked as the
+  // actual seizable collateral in CollateralVault (Ethereum Sepolia for now, while Arc itself
+  // is still testnet; mainnet after that and an audit).
   const [mainnetNftContract, setMainnetNftContract] = useState("");
   const [mainnetTokenId, setMainnetTokenId] = useState("");
-
-  // The Sepolia-testnet NFT actually locked as seizable collateral.
-  const [sepoliaNftContract, setSepoliaNftContract] = useState("");
-  const [sepoliaTokenId, setSepoliaTokenId] = useState("");
 
   const [eligibility, setEligibility] = useState<EligibilityResult | null>(null);
   const [eligibilityLoading, setEligibilityLoading] = useState(false);
@@ -106,10 +104,10 @@ export default function BorrowPage() {
     setLockError(null);
     setLocking(true);
     try {
-      const tokenId = BigInt(sepoliaTokenId || "0");
+      const tokenId = BigInt(mainnetTokenId || "0");
 
       const approveHash = await writeContractAsync({
-        address: sepoliaNftContract as `0x${string}`,
+        address: mainnetNftContract as `0x${string}`,
         abi: erc721Abi,
         functionName: "approve",
         args: [COLLATERAL_VAULT_ADDRESS, tokenId],
@@ -122,7 +120,7 @@ export default function BorrowPage() {
         address: COLLATERAL_VAULT_ADDRESS,
         abi: collateralVaultAbi,
         functionName: "lockCollateral",
-        args: [sepoliaNftContract as `0x${string}`, tokenId, arcLoanRef],
+        args: [mainnetNftContract as `0x${string}`, tokenId, arcLoanRef],
         chainId: sepolia.id,
       });
       await waitForTransactionReceipt(wagmiConfig, { hash: lockHash, chainId: sepolia.id });
@@ -131,7 +129,7 @@ export default function BorrowPage() {
         address: COLLATERAL_VAULT_ADDRESS,
         abi: collateralVaultAbi,
         functionName: "activeDepositOf",
-        args: [sepoliaNftContract as `0x${string}`, tokenId],
+        args: [mainnetNftContract as `0x${string}`, tokenId],
         chainId: sepolia.id,
       });
       setDepositId(id as `0x${string}`);
@@ -212,8 +210,9 @@ export default function BorrowPage() {
         <h1 className="text-2xl font-semibold mb-2">Borrow</h1>
         <p className="text-muted text-sm">
           Borrow up to a tier&apos;s worth of USDC as a 30-day loan, gated by real cross-chain
-          wallet activity and an Ethereum-mainnet NFT you own, and collateralized by a matching
-          NFT locked on Ethereum Sepolia.
+          wallet activity and an Ethereum-mainnet NFT you own — that same NFT is locked as
+          collateral on Ethereum Sepolia for now, the same way it will on mainnet once Arc itself
+          is out of testnet.
         </p>
       </div>
 
@@ -252,10 +251,11 @@ export default function BorrowPage() {
           </div>
 
           <div className="rounded-lg border border-border bg-surface p-4">
-            <h2 className="font-medium mb-2">2. Your Ethereum mainnet NFT (eligibility)</h2>
+            <h2 className="font-medium mb-2">2. Your Ethereum mainnet NFT</h2>
             <p className="text-xs text-muted mb-2">
-              Read only — never locked. Must be worth more than {TIER_LABELS[tier]} and held 6+
-              months.
+              This is the NFT that backs the loan — it must be worth more than {TIER_LABELS[tier]}
+              and held 6+ months. Once eligible, it&apos;s the same NFT you&apos;ll lock as
+              collateral below.
             </p>
             <div className="flex gap-2">
               <input
@@ -300,29 +300,16 @@ export default function BorrowPage() {
           </div>
 
           <div className="rounded-lg border border-border bg-surface p-4">
-            <h2 className="font-medium mb-2">3. Lock collateral on Sepolia</h2>
+            <h2 className="font-medium mb-2">3. Lock it as collateral</h2>
             <p className="text-xs text-muted mb-2">
-              An NFT you own on Ethereum Sepolia — this is what actually gets locked and, if you
-              default, seized.
+              Transfers token #{mainnetTokenId || "…"} on {mainnetNftContract || "the contract above"} into
+              HomTech&apos;s vault on Ethereum Sepolia (staging ahead of mainnet). If you default,
+              it&apos;s seized.
             </p>
-            <div className="flex gap-2">
-              <input
-                value={sepoliaNftContract}
-                onChange={(e) => setSepoliaNftContract(e.target.value)}
-                placeholder="Sepolia NFT contract address (0x…)"
-                className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono focus:border-accent"
-              />
-              <input
-                value={sepoliaTokenId}
-                onChange={(e) => setSepoliaTokenId(e.target.value)}
-                placeholder="Token ID"
-                className="w-32 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono focus:border-accent"
-              />
-            </div>
             <button
               onClick={lockCollateral}
-              disabled={!eligibility?.eligible || locking || !sepoliaNftContract || !sepoliaTokenId}
-              className="mt-2 rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+              disabled={!eligibility?.eligible || locking}
+              className="rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
             >
               {locking ? "Approving + locking…" : "Approve + Lock NFT"}
             </button>

@@ -7,15 +7,17 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /// @title CollateralVault
-/// @notice Deployed on Ethereum Sepolia. Holds the NFT a borrower locks as loan collateral for
-///         the companion LendingPool on Arc Testnet. This vault has no knowledge of Arc — it is
-///         driven entirely by a trusted relayer (the off-chain oracle/relayer service) that
-///         watches LendingPool's LoanRepaid/LoanDefaulted events and calls unlockCollateral or
-///         seizeCollateral accordingly.
-/// @dev The mainnet NFT used for the *eligibility* check (value + hold-duration) is read
-///      read-only by the oracle service and is never custodied here. The NFT actually locked in
-///      this vault is a Sepolia-testnet asset standing in for that collateral, so the seizure
-///      mechanic can be demonstrated end-to-end with no real-asset risk.
+/// @notice Currently deployed on Ethereum Sepolia while Arc itself is still testnet (see
+///         DeploySepolia.s.sol / DeployMainnet.s.sol). Holds the borrower's NFT — the exact
+///         nftContract/tokenId already checked for eligibility (value + hold-duration) — locked
+///         as loan collateral for the companion LendingPool on Arc Testnet, the same way it will
+///         on mainnet once Arc and this vault are production-ready. This vault has no knowledge
+///         of Arc — it is driven entirely by a trusted relayer (the off-chain oracle/relayer
+///         service) that watches LendingPool's LoanRepaid/LoanDefaulted events and calls
+///         unlockCollateral or seizeCollateral accordingly.
+/// @dev The borrower approves and locks the exact nftContract/tokenId the oracle service already
+///      verified for eligibility — there is no separate stand-in asset. Point this at Ethereum
+///      mainnet only after an independent security audit.
 contract CollateralVault is IERC721Receiver, Ownable, ReentrancyGuard {
     struct Deposit {
         address borrower;

@@ -26,8 +26,9 @@ app.post("/api/eligibility", async (req, res) => {
 
 /**
  * Re-runs eligibility, and if it passes, signs the EIP-712 attestation the borrower submits to
- * LendingPool.claimLoan. Requires the borrower to have already locked the (Sepolia) collateral
- * NFT and pass the resulting depositId in `sepoliaDepositId`.
+ * LendingPool.claimLoan. Requires the borrower to have already locked that same NFT as
+ * collateral in CollateralVault (Ethereum Sepolia for now) and pass the resulting depositId in
+ * `sepoliaDepositId`.
  */
 app.post("/api/attestation", async (req, res) => {
   try {
