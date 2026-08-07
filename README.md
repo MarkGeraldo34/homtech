@@ -17,7 +17,8 @@ contracts/        Foundry project
 
 oracle-service/    Node/TypeScript
   eligibility/         real off-chain checks: cross-chain wallet volume (Covalent/GoldRush),
-                       mainnet NFT ownership/value/hold-duration (Alchemy)
+                       mainnet NFT ownership + current value (Alchemy), and a 6-month
+                       sustained floor-value check (CoinGecko) — no NFT hold-duration requirement
   attestation.ts       signs the EIP-712 attestation LendingPool.claimLoan verifies
   relayer.ts            watches Arc for LoanRepaid/LoanDefaulted, relays to the Sepolia vault
   server.ts             HTTP API the frontend calls (eligibility check + attestation request)
@@ -120,6 +121,11 @@ Connect a browser wallet (MetaMask, Rabby, etc.), fund it from the faucets above
 - **"33 EVM chains"** — the volume check queries whichever chains Covalent/GoldRush supports by
   default (see `oracle-service/src/config.ts`); pass an exact list via `VOLUME_CHECK_CHAINS` if
   you have one.
+- **NFT collateral value** must currently be worth more than the tier amount *and* the
+  collection's floor price must not have dropped to or below that amount at any point in the
+  trailing 6 months (`NFT_VALUE_LOOKBACK_DAYS` in `oracle-service/src/eligibility/nft.ts`, via
+  CoinGecko's NFT floor-price history). There is no minimum hold-duration on the token itself —
+  a recently-acquired NFT from a collection with a stable 6-month floor price is eligible.
 - **Seized NFTs** land in a per-tier pool treasury address (lenders share a pool, so an NFT can't
   be split pro-rata). Auctioning it and crediting proceeds back to lenders is a manual step, not
   automated here.

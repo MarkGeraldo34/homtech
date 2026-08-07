@@ -254,8 +254,9 @@ export default function BorrowPage() {
             <h2 className="font-medium mb-2">2. Your Ethereum mainnet NFT</h2>
             <p className="text-xs text-muted mb-2">
               This is the NFT that backs the loan — it must be worth more than {TIER_LABELS[tier]}
-              and held 6+ months. Once eligible, it&apos;s the same NFT you&apos;ll lock as
-              collateral below.
+              now, and its collection&apos;s floor price must not have dropped to or below that
+              amount at any point in the last 6 months. No minimum hold duration on the token
+              itself. Once eligible, it&apos;s the same NFT you&apos;ll lock as collateral below.
             </p>
             <div className="flex gap-2">
               <input

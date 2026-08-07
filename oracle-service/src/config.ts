@@ -44,6 +44,4 @@ export const config = {
   ).split(",").filter(Boolean),
 
   alchemyApiKey: optional("ALCHEMY_API_KEY", ""),
-
-  minNftHoldDays: Number(optional("MIN_NFT_HOLD_DAYS", "180")),
 };
