@@ -134,6 +134,11 @@ Connect a browser wallet (MetaMask, Rabby, etc.), fund it from the faucets above
   trailing 6 months (`NFT_VALUE_LOOKBACK_DAYS` in `oracle-service/src/eligibility/nft.ts`, via
   CoinGecko's NFT floor-price history). There is no minimum hold-duration on the token itself —
   a recently-acquired NFT from a collection with a stable 6-month floor price is eligible.
+  **The floor-price-history check runs on free data by default** — CoinGecko's daily NFT
+  historical-data endpoint is Pro-only (paid), so without a `COINGECKO_API_KEY` this
+  approximates the same check from CoinGecko's free 30d/60d/1y floor-price %-change fields
+  instead (3 checkpoints, not a daily series — coarser, but real signal at no cost). Setting
+  `COINGECKO_API_KEY` upgrades to the accurate Pro daily-history version automatically.
 - **Seized NFTs** land in a per-tier pool treasury address (lenders share a pool, so an NFT can't
   be split pro-rata). Auctioning it and crediting proceeds back to lenders is a manual step, not
   automated here.

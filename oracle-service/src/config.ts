@@ -44,4 +44,9 @@ export const config = {
   ).split(",").filter(Boolean),
 
   alchemyApiKey: optional("ALCHEMY_API_KEY", ""),
+
+  // CoinGecko Pro key (optional) — upgrades the 6-month sustained NFT floor-price-history check
+  // (src/eligibility/nft.ts) to daily-granularity data. Unset by default; without it, that check
+  // falls back to a free approximation from 30d/60d/1y %-change data.
+  coingeckoApiKey: optional("COINGECKO_API_KEY", ""),
 };
