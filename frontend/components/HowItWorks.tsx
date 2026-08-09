@@ -34,22 +34,19 @@ interface Step {
   body: string;
 }
 
-function StepList({ steps, accentClass }: { steps: Step[]; accentClass: string }) {
+function StepList({ steps, accentClass, bgClass }: { steps: Step[]; accentClass: string; bgClass: string }) {
   return (
-    <ol className="space-y-5">
+    <ol className="space-y-3">
       {steps.map((step, i) => (
-        <li key={step.title} className="flex gap-4">
-          <div className="flex flex-col items-center">
-            <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent/10 ${accentClass}`}>
-              <Icon path={step.icon} />
-            </span>
-            {i < steps.length - 1 && <span className="mt-1 w-px flex-1 bg-border" />}
-          </div>
-          <div className="pb-1">
+        <li key={step.title} className="surface-card surface-card--hover flex gap-4 p-4">
+          <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${bgClass} ${accentClass}`}>
+            <Icon path={step.icon} />
+          </span>
+          <div className="pt-0.5">
             <p className="text-sm font-medium">
               <span className="text-muted">{i + 1}.</span> {step.title}
             </p>
-            <p className="mt-0.5 text-sm text-muted">{step.body}</p>
+            <p className="mt-0.5 text-sm text-muted leading-relaxed">{step.body}</p>
           </div>
         </li>
       ))}
@@ -59,16 +56,27 @@ function StepList({ steps, accentClass }: { steps: Step[]; accentClass: string }
 
 export function HowItWorks() {
   return (
-    <section className="space-y-6">
-      <h2 className="text-xl font-semibold tracking-tight">How HomTech works</h2>
+    <section className="space-y-8">
+      <div className="space-y-2 text-center">
+        <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">How HomTech works</h2>
+        <p className="text-muted text-sm max-w-md mx-auto">
+          Two sides of the same pool &mdash; borrowers get fast USDC, lenders earn while it&apos;s out.
+        </p>
+      </div>
       <div className="grid gap-8 sm:grid-cols-2">
         <div>
-          <h3 className="mb-4 text-sm font-medium text-accent">Borrowing</h3>
-          <StepList steps={BORROW_STEPS} accentClass="text-accent" />
+          <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-accent">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            Borrowing
+          </h3>
+          <StepList steps={BORROW_STEPS} accentClass="text-accent" bgClass="bg-accent/10" />
         </div>
         <div>
-          <h3 className="mb-4 text-sm font-medium text-accent-2">Lending</h3>
-          <StepList steps={LEND_STEPS} accentClass="text-accent-2" />
+          <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold text-accent-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent-2" />
+            Lending
+          </h3>
+          <StepList steps={LEND_STEPS} accentClass="text-accent-2" bgClass="bg-accent-2/10" />
         </div>
       </div>
     </section>

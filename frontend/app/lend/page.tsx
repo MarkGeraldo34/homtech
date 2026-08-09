@@ -119,37 +119,46 @@ export default function LendPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold mb-2">Lend</h1>
-        <p className="text-muted text-sm">
+    <div className="max-w-2xl mx-auto space-y-8">
+      <div className="space-y-2">
+        <span className="eyebrow">
+          <span className="eyebrow-dot" />
+          Lender
+        </span>
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Lend</h1>
+        <p className="text-muted text-sm leading-relaxed">
           Deposit USDC into a tier pool. Your share earns RENT tokens for every day a loan in that
           tier is outstanding, streaming continuously until it&apos;s repaid.
         </p>
       </div>
 
-      <TierPicker value={tier} onChange={setTier} />
+      <div className="surface-card p-5 space-y-3">
+        <p className="text-sm font-medium">Choose a pool</p>
+        <TierPicker value={tier} onChange={setTier} />
+      </div>
 
       {!isConnected ? (
-        <p className="text-sm text-muted">Connect your wallet on Arc Testnet to lend.</p>
+        <div className="surface-card p-6 text-center text-sm text-muted">
+          Connect your wallet on Arc Testnet to lend.
+        </div>
       ) : (
         <div className="space-y-6">
-          <dl className="grid grid-cols-2 gap-4 rounded-lg border border-border bg-surface p-4 text-sm">
-            <div>
-              <dt className="text-muted">Your deposit ({TIER_LABELS[tier]} pool)</dt>
-              <dd className="font-mono">{formatUnits(deposited, USDC_DECIMALS)} USDC</dd>
+          <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="surface-card p-4">
+              <dt className="text-xs text-muted">Your deposit ({TIER_LABELS[tier]} pool)</dt>
+              <dd className="mt-1 font-mono text-sm">{formatUnits(deposited, USDC_DECIMALS)} USDC</dd>
             </div>
-            <div>
-              <dt className="text-muted">Pending rewards</dt>
-              <dd className="font-mono">{Number(formatUnits(pending, 18)).toFixed(4)} RENT</dd>
+            <div className="surface-card p-4">
+              <dt className="text-xs text-muted">Pending rewards</dt>
+              <dd className="mt-1 font-mono text-sm text-accent">{Number(formatUnits(pending, 18)).toFixed(4)} RENT</dd>
             </div>
-            <div>
-              <dt className="text-muted">Idle pool liquidity</dt>
-              <dd className="font-mono">{formatUnits(idleLiquidity ?? 0n, USDC_DECIMALS)} USDC</dd>
+            <div className="surface-card p-4">
+              <dt className="text-xs text-muted">Idle pool liquidity</dt>
+              <dd className="mt-1 font-mono text-sm">{formatUnits(idleLiquidity ?? 0n, USDC_DECIMALS)} USDC</dd>
             </div>
           </dl>
 
-          <div className="space-y-2">
+          <div className="surface-card p-5 space-y-2">
             <label className="text-sm font-medium">Deposit amount (USDC)</label>
             <div className="flex gap-2">
               <input
@@ -161,26 +170,18 @@ export default function LendPage() {
                 placeholder="0.00"
               />
               {needsApproval ? (
-                <button
-                  onClick={approve}
-                  disabled={isPending}
-                  className="rounded-md bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-sm text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
-                >
+                <button onClick={approve} disabled={isPending} className="btn-primary">
                   Approve
                 </button>
               ) : (
-                <button
-                  onClick={deposit}
-                  disabled={isPending || !depositAmount}
-                  className="rounded-md bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-sm text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
-                >
+                <button onClick={deposit} disabled={isPending || !depositAmount} className="btn-primary">
                   Deposit
                 </button>
               )}
             </div>
           </div>
 
-          <div className="space-y-2">
+          <div className="surface-card p-5 space-y-2">
             <label className="text-sm font-medium">Withdraw amount (USDC, idle liquidity only)</label>
             <div className="flex gap-2">
               <input
@@ -191,28 +192,27 @@ export default function LendPage() {
                 className="flex-1 rounded-md border border-border bg-background px-3 py-2 text-sm focus:border-accent"
                 placeholder="0.00"
               />
-              <button
-                onClick={withdraw}
-                disabled={isPending || !withdrawAmount}
-                className="rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
-              >
+              <button onClick={withdraw} disabled={isPending || !withdrawAmount} className="btn-secondary">
                 Withdraw
               </button>
             </div>
           </div>
 
-          <button
-            onClick={claimRewards}
-            disabled={isPending || pending === 0n}
-            className="rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
-          >
-            Claim {Number(formatUnits(pending, 18)).toFixed(4)} RENT
-          </button>
+          <div className="surface-card p-5 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-muted">
+              Claimable rewards: <span className="font-mono text-foreground">{Number(formatUnits(pending, 18)).toFixed(4)} RENT</span>
+            </p>
+            <button onClick={claimRewards} disabled={isPending || pending === 0n} className="btn-secondary">
+              Claim rewards
+            </button>
+          </div>
 
-          {isPending && <p className="text-sm text-muted">Confirm in wallet…</p>}
-          {isConfirming && <p className="text-sm text-muted">Waiting for confirmation…</p>}
-          {isConfirmed && <p className="text-sm text-green-600 dark:text-green-400">Confirmed.</p>}
-          {writeError && <p className="text-sm text-red-600 dark:text-red-400">{writeError.message}</p>}
+          <div className="space-y-1 text-sm">
+            {isPending && <p className="text-muted">Confirm in wallet…</p>}
+            {isConfirming && <p className="text-muted">Waiting for confirmation…</p>}
+            {isConfirmed && <p className="text-green-600 dark:text-green-400">Confirmed.</p>}
+            {writeError && <p className="text-red-600 dark:text-red-400">{writeError.message}</p>}
+          </div>
         </div>
       )}
     </div>

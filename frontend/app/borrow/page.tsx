@@ -205,10 +205,14 @@ export default function BorrowPage() {
   const hasActiveLoan = !!activeLoanId && activeLoanId > 0n;
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold mb-2">Borrow</h1>
-        <p className="text-muted text-sm">
+    <div className="max-w-2xl mx-auto space-y-8">
+      <div className="space-y-2">
+        <span className="eyebrow">
+          <span className="eyebrow-dot" />
+          Borrower
+        </span>
+        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">Borrow</h1>
+        <p className="text-muted text-sm leading-relaxed">
           Borrow up to a tier&apos;s worth of USDC as a 30-day loan, gated by real cross-chain
           wallet activity and an Ethereum-mainnet NFT you own — that same NFT is locked as
           collateral on Ethereum Sepolia for now, the same way it will on mainnet once Arc itself
@@ -217,48 +221,44 @@ export default function BorrowPage() {
       </div>
 
       {!isConnected ? (
-        <p className="text-sm text-muted">Connect your wallet to borrow.</p>
+        <div className="surface-card p-6 text-center text-sm text-muted">Connect your wallet to borrow.</div>
       ) : hasActiveLoan && loan ? (
-        <div className="space-y-4 rounded-lg border border-border bg-surface p-4">
+        <div className="surface-card space-y-4 p-5">
           <h2 className="font-medium">Active loan #{activeLoanId?.toString()}</h2>
-          <dl className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <dt className="text-muted">Tier</dt>
-              <dd>{TIER_LABELS[loan[1]]}</dd>
+          <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+            <div className="rounded-lg border border-border p-3">
+              <dt className="text-xs text-muted">Tier</dt>
+              <dd className="mt-1 font-medium">{TIER_LABELS[loan[1]]}</dd>
             </div>
-            <div>
-              <dt className="text-muted">Principal</dt>
-              <dd className="font-mono">{formatUnits(loan[2], 6)} USDC</dd>
+            <div className="rounded-lg border border-border p-3">
+              <dt className="text-xs text-muted">Principal</dt>
+              <dd className="mt-1 font-mono">{formatUnits(loan[2], 6)} USDC</dd>
             </div>
-            <div>
-              <dt className="text-muted">Due</dt>
-              <dd>{new Date(Number(loan[4]) * 1000).toLocaleString()}</dd>
+            <div className="rounded-lg border border-border p-3">
+              <dt className="text-xs text-muted">Due</dt>
+              <dd className="mt-1">{new Date(Number(loan[4]) * 1000).toLocaleString()}</dd>
             </div>
           </dl>
-          <button
-            onClick={repayLoan}
-            disabled={isPending}
-            className="rounded-md bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-sm text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
-          >
+          <button onClick={repayLoan} disabled={isPending} className="btn-primary">
             Repay {formatUnits(loan[2], 6)} USDC
           </button>
         </div>
       ) : (
-        <div className="space-y-8">
-          <div className="rounded-lg border border-border bg-surface p-4">
-            <h2 className="font-medium mb-2">1. Choose a tier</h2>
+        <div className="space-y-5">
+          <div className="surface-card p-5">
+            <StepHeader n={1} title="Choose a tier" />
             <TierPicker value={tier} onChange={setTier} />
           </div>
 
-          <div className="rounded-lg border border-border bg-surface p-4">
-            <h2 className="font-medium mb-2">2. Your Ethereum mainnet NFT</h2>
-            <p className="text-xs text-muted mb-2">
+          <div className="surface-card p-5">
+            <StepHeader n={2} title="Your Ethereum mainnet NFT" />
+            <p className="text-xs text-muted mb-3 leading-relaxed">
               This is the NFT that backs the loan — it must be worth more than {TIER_LABELS[tier]}
               now, and its collection&apos;s floor price must not have dropped to or below that
               amount at any point in the last 6 months. No minimum hold duration on the token
               itself. Once eligible, it&apos;s the same NFT you&apos;ll lock as collateral below.
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 value={mainnetNftContract}
                 onChange={(e) => setMainnetNftContract(e.target.value)}
@@ -269,20 +269,20 @@ export default function BorrowPage() {
                 value={mainnetTokenId}
                 onChange={(e) => setMainnetTokenId(e.target.value)}
                 placeholder="Token ID"
-                className="w-32 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono focus:border-accent"
+                className="sm:w-32 rounded-md border border-border bg-background px-3 py-2 text-sm font-mono focus:border-accent"
               />
             </div>
             <button
               onClick={checkEligibility}
               disabled={eligibilityLoading || !mainnetNftContract || !mainnetTokenId}
-              className="mt-2 rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+              className="btn-secondary mt-3"
             >
               {eligibilityLoading ? "Checking…" : "Check eligibility"}
             </button>
             {eligibilityError && <p className="mt-2 text-sm text-red-600 dark:text-red-400">{eligibilityError}</p>}
             {eligibility && (
               <div
-                className={`mt-2 rounded-md border p-3 text-sm ${
+                className={`mt-3 rounded-md border p-3 text-sm ${
                   eligibility.eligible
                     ? "border-green-500/30 bg-green-500/10 text-green-700 dark:text-green-400"
                     : "border-red-500/30 bg-red-500/10 text-red-700 dark:text-red-400"
@@ -300,9 +300,9 @@ export default function BorrowPage() {
             )}
           </div>
 
-          <div className="rounded-lg border border-border bg-surface p-4">
-            <h2 className="font-medium mb-2">3. Lock it as collateral</h2>
-            <p className="text-xs text-muted mb-2">
+          <div className="surface-card p-5">
+            <StepHeader n={3} title="Lock it as collateral" />
+            <p className="text-xs text-muted mb-3 leading-relaxed">
               Transfers token #{mainnetTokenId || "…"} on {mainnetNftContract || "the contract above"} into
               HomTech&apos;s vault on Ethereum Sepolia (staging ahead of mainnet). If you default,
               it&apos;s seized.
@@ -310,7 +310,7 @@ export default function BorrowPage() {
             <button
               onClick={lockCollateral}
               disabled={!eligibility?.eligible || locking}
-              className="rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
+              className="btn-secondary"
             >
               {locking ? "Approving + locking…" : "Approve + Lock NFT"}
             </button>
@@ -320,33 +320,44 @@ export default function BorrowPage() {
             )}
           </div>
 
-          <div className="rounded-lg border border-border bg-surface p-4">
-            <h2 className="font-medium mb-2">4. Get attestation + claim loan</h2>
-            <button
-              onClick={requestAttestation}
-              disabled={!depositId || attestationLoading}
-              className="rounded-md border border-border px-4 py-2 text-sm transition-colors hover:border-accent hover:text-accent disabled:opacity-50"
-            >
-              {attestationLoading ? "Requesting…" : "Request attestation"}
-            </button>
+          <div className="surface-card p-5">
+            <StepHeader n={4} title="Get attestation + claim loan" />
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={requestAttestation}
+                disabled={!depositId || attestationLoading}
+                className="btn-secondary"
+              >
+                {attestationLoading ? "Requesting…" : "Request attestation"}
+              </button>
+              {attestationResult?.attestation && (
+                <button onClick={claimLoan} disabled={isPending} className="btn-primary">
+                  Pay 15% interest + claim {TIER_LABELS[tier]}
+                </button>
+              )}
+            </div>
             {attestationResult && !attestationResult.eligible && (
               <p className="mt-2 text-sm text-red-600 dark:text-red-400">{attestationResult.error || attestationResult.reasons?.join("; ")}</p>
             )}
-            {attestationResult?.attestation && (
-              <button
-                onClick={claimLoan}
-                disabled={isPending}
-                className="mt-2 ml-2 rounded-md bg-gradient-to-r from-accent to-accent-2 px-4 py-2 text-sm text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
-              >
-                Pay 15% interest + claim {TIER_LABELS[tier]}
-              </button>
-            )}
           </div>
 
-          {isConfirmed && <p className="text-sm text-green-600 dark:text-green-400">Last transaction confirmed.</p>}
-          {writeError && <p className="text-sm text-red-600 dark:text-red-400">{writeError.message}</p>}
+          <div className="space-y-1 text-sm">
+            {isConfirmed && <p className="text-green-600 dark:text-green-400">Last transaction confirmed.</p>}
+            {writeError && <p className="text-red-600 dark:text-red-400">{writeError.message}</p>}
+          </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function StepHeader({ n, title }: { n: number; title: string }) {
+  return (
+    <div className="mb-3 flex items-center gap-2.5">
+      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-2 text-xs font-semibold text-white">
+        {n}
+      </span>
+      <h2 className="font-medium">{title}</h2>
     </div>
   );
 }

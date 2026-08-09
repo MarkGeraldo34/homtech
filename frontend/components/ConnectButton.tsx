@@ -19,7 +19,7 @@ export function ConnectButton() {
       <button
         onClick={() => injectedConnector && connect({ connector: injectedConnector })}
         disabled={isPending}
-        className="shrink-0 whitespace-nowrap rounded-md bg-gradient-to-r from-accent to-accent-2 px-3 sm:px-4 py-2 text-sm font-medium text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="btn-primary shrink-0 whitespace-nowrap"
       >
         {isPending ? "Connecting…" : (
           <>
