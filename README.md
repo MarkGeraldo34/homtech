@@ -82,6 +82,14 @@ forge script script/DeploySepolia.s.sol --rpc-url $SEPOLIA_RPC_URL --broadcast
 # note the CollateralVault address it prints
 ```
 
+### Deployed addresses
+
+| Contract | Chain | Address |
+| --- | --- | --- |
+| `LendingPool` | Arc Testnet | [`0x46dDbEEC16De40edDb9D8800266Eac50aa16aC3D`](https://testnet.arcscan.app/address/0x46dDbEEC16De40edDb9D8800266Eac50aa16aC3D) |
+| `RewardToken` (`$RENT`) | Arc Testnet | [`0xCb65b8F04e0135CF059066b8e571357146cb39AB`](https://testnet.arcscan.app/address/0xCb65b8F04e0135CF059066b8e571357146cb39AB) |
+| `CollateralVault` | Ethereum Sepolia | [`0x46dDbEEC16De40edDb9D8800266Eac50aa16aC3D`](https://sepolia.etherscan.io/address/0x46dDbEEC16De40edDb9D8800266Eac50aa16aC3D) |
+
 ## 2. Run the oracle-service
 
 ```bash

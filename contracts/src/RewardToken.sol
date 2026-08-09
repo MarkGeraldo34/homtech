@@ -5,7 +5,7 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 /// @notice Streaming reward token minted to lenders as loans backed by their tier pool accrue.
-/// @dev Mint-only, single authorized minter (the LendingPool). Placeholder name/symbol.
+/// @dev Mint-only, single authorized minter (the LendingPool).
 contract RewardToken is ERC20, Ownable {
     address public minter;
 
@@ -13,7 +13,7 @@ contract RewardToken is ERC20, Ownable {
 
     error NotMinter();
 
-    constructor(address initialOwner) ERC20("RentPoints", "RENT") Ownable(initialOwner) {}
+    constructor(address initialOwner) ERC20("HomTech Rent", "RENT") Ownable(initialOwner) {}
 
     modifier onlyMinter() {
         if (msg.sender != minter) revert NotMinter();

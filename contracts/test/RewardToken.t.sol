@@ -15,7 +15,7 @@ contract RewardTokenTest is Test {
     }
 
     function test_metadata() public view {
-        assertEq(token.name(), "RentPoints");
+        assertEq(token.name(), "HomTech Rent");
         assertEq(token.symbol(), "RENT");
         assertEq(token.decimals(), 18);
     }
