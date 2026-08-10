@@ -120,7 +120,7 @@ export default function LendPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
-      <div className="space-y-2">
+      <div className="animate-fade-up space-y-2">
         <span className="eyebrow">
           <span className="eyebrow-dot" />
           Lender
@@ -132,17 +132,17 @@ export default function LendPage() {
         </p>
       </div>
 
-      <div className="surface-card p-5 space-y-3">
+      <div className="animate-fade-up fade-delay-1 surface-card p-5 space-y-3">
         <p className="text-sm font-medium">Choose a pool</p>
         <TierPicker value={tier} onChange={setTier} />
       </div>
 
       {!isConnected ? (
-        <div className="surface-card p-6 text-center text-sm text-muted">
+        <div className="animate-fade-up fade-delay-2 surface-card p-6 text-center text-sm text-muted">
           Connect your wallet on Arc Testnet to lend.
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="animate-fade-up fade-delay-2 space-y-6">
           <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="surface-card p-4">
               <dt className="text-xs text-muted">Your deposit ({TIER_LABELS[tier]} pool)</dt>

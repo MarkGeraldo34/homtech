@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  scroll-behavior: smooth;
   --background: #fbfaff;
   --foreground: #171717;
   --surface: #f8f7fb;
@@ -152,10 +153,28 @@ body {
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-up {
-  animation: fade-up 0.5s ease both;
+  animation: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.fade-delay-1 { animation-delay: 0.08s; }
+.fade-delay-2 { animation-delay: 0.16s; }
+.fade-delay-3 { animation-delay: 0.24s; }
+.fade-delay-4 { animation-delay: 0.32s; }
+.fade-delay-5 { animation-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up {
+    animation: none;
+  }
+  .eyebrow-dot {
+    animation: none;
+  }
+  :root {
+    scroll-behavior: auto;
+  }
 }

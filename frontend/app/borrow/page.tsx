@@ -206,7 +206,7 @@ export default function BorrowPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-8">
-      <div className="space-y-2">
+      <div className="animate-fade-up space-y-2">
         <span className="eyebrow">
           <span className="eyebrow-dot" />
           Borrower
@@ -221,9 +221,11 @@ export default function BorrowPage() {
       </div>
 
       {!isConnected ? (
-        <div className="surface-card p-6 text-center text-sm text-muted">Connect your wallet to borrow.</div>
+        <div className="animate-fade-up fade-delay-1 surface-card p-6 text-center text-sm text-muted">
+          Connect your wallet to borrow.
+        </div>
       ) : hasActiveLoan && loan ? (
-        <div className="surface-card space-y-4 p-5">
+        <div className="animate-fade-up fade-delay-1 surface-card space-y-4 p-5">
           <h2 className="font-medium">Active loan #{activeLoanId?.toString()}</h2>
           <dl className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
             <div className="rounded-lg border border-border p-3">
@@ -245,12 +247,12 @@ export default function BorrowPage() {
         </div>
       ) : (
         <div className="space-y-5">
-          <div className="surface-card p-5">
+          <div className="animate-fade-up surface-card p-5">
             <StepHeader n={1} title="Choose a tier" />
             <TierPicker value={tier} onChange={setTier} />
           </div>
 
-          <div className="surface-card p-5">
+          <div className="animate-fade-up fade-delay-1 surface-card p-5">
             <StepHeader n={2} title="Your Ethereum mainnet NFT" />
             <p className="text-xs text-muted mb-3 leading-relaxed">
               This is the NFT that backs the loan — it must be worth more than {TIER_LABELS[tier]}
@@ -300,7 +302,7 @@ export default function BorrowPage() {
             )}
           </div>
 
-          <div className="surface-card p-5">
+          <div className="animate-fade-up fade-delay-2 surface-card p-5">
             <StepHeader n={3} title="Lock it as collateral" />
             <p className="text-xs text-muted mb-3 leading-relaxed">
               Transfers token #{mainnetTokenId || "…"} on {mainnetNftContract || "the contract above"} into
@@ -320,7 +322,7 @@ export default function BorrowPage() {
             )}
           </div>
 
-          <div className="surface-card p-5">
+          <div className="animate-fade-up fade-delay-3 surface-card p-5">
             <StepHeader n={4} title="Get attestation + claim loan" />
             <div className="flex flex-wrap items-center gap-2">
               <button

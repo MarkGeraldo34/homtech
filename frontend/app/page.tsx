@@ -83,7 +83,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="animate-fade-up grid grid-cols-2 gap-3 sm:gap-4" style={{ animationDelay: "0.1s" }}>
+        <div className="animate-fade-up fade-delay-1 grid grid-cols-2 gap-3 sm:gap-4">
           {FACTS.map((fact, i) => (
             <div key={fact.label} className="surface-card surface-card--hover p-5">
               <span
@@ -102,9 +102,11 @@ export default function Home() {
         </div>
       </section>
 
-      <HowItWorks />
+      <div className="animate-fade-up fade-delay-2">
+        <HowItWorks />
+      </div>
 
-      <section className="surface-card p-8 sm:p-10 text-center space-y-4 bg-gradient-to-br from-accent/5 to-accent-2/5">
+      <section className="animate-fade-up fade-delay-3 surface-card p-8 sm:p-10 text-center space-y-4 bg-gradient-to-br from-accent/5 to-accent-2/5">
         <h2 className="text-xl sm:text-2xl font-semibold tracking-tight">Ready to get started?</h2>
         <p className="text-muted text-sm max-w-md mx-auto">
           Connect a wallet on Arc Testnet to deposit into a pool or draw your first loan.

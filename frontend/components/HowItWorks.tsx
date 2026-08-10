@@ -38,7 +38,10 @@ function StepList({ steps, accentClass, bgClass }: { steps: Step[]; accentClass:
   return (
     <ol className="space-y-3">
       {steps.map((step, i) => (
-        <li key={step.title} className="surface-card surface-card--hover flex gap-4 p-4">
+        <li
+          key={step.title}
+          className={`animate-fade-up surface-card surface-card--hover flex gap-4 p-4 ${i > 0 ? `fade-delay-${i}` : ""}`}
+        >
           <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${bgClass} ${accentClass}`}>
             <Icon path={step.icon} />
           </span>
@@ -57,7 +60,7 @@ function StepList({ steps, accentClass, bgClass }: { steps: Step[]; accentClass:
 export function HowItWorks() {
   return (
     <section className="space-y-8">
-      <div className="space-y-2 text-center">
+      <div className="animate-fade-up space-y-2 text-center">
         <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">How HomTech works</h2>
         <p className="text-muted text-sm max-w-md mx-auto">
           Two sides of the same pool &mdash; borrowers get fast USDC, lenders earn while it&apos;s out.
