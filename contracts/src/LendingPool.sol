@@ -366,8 +366,8 @@ contract LendingPool is Ownable, ReentrancyGuard, EIP712 {
         uint256 accRewardPerShare = p.accRewardPerShare;
         uint256 elapsed = block.timestamp - p.lastUpdateTs;
         if (elapsed > 0 && p.totalDeposits > 0 && p.activeLoanCount > 0) {
-            uint256 rewardAccrued = (dailyRewardRate(tierIndex) * p.activeLoanCount * elapsed) / 1 days;
-            accRewardPerShare += (rewardAccrued * 1e18) / p.totalDeposits;
+            accRewardPerShare +=
+                (dailyRewardRate(tierIndex) * p.activeLoanCount * elapsed * 1e18) / (1 days * p.totalDeposits);
         }
 
         uint256 accrued = (li.deposited * accRewardPerShare) / 1e18;
@@ -394,8 +394,8 @@ contract LendingPool is Ownable, ReentrancyGuard, EIP712 {
         }
         uint256 elapsed = nowTs - p.lastUpdateTs;
         if (p.totalDeposits > 0 && p.activeLoanCount > 0) {
-            uint256 rewardAccrued = (dailyRewardRate(tierIndex) * p.activeLoanCount * elapsed) / 1 days;
-            p.accRewardPerShare += (rewardAccrued * 1e18) / p.totalDeposits;
+            p.accRewardPerShare +=
+                (dailyRewardRate(tierIndex) * p.activeLoanCount * elapsed * 1e18) / (1 days * p.totalDeposits);
         }
         p.lastUpdateTs = nowTs;
     }

@@ -6,3 +6,6 @@ broadcast/
 
 # Secrets
 .env
+
+# Slither venv (pip install slither-analyzer into contracts/.venv)
+.venv/
