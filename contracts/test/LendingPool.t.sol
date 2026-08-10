@@ -371,4 +371,96 @@ contract LendingPoolTest is Test {
     function _signAttestation2(LendingPool.Attestation memory att) internal view returns (bytes memory) {
         return _signAttestation(att);
     }
+
+    // --- admin setters / views ---
+
+    function test_constructor_revertsOnZeroAddress() public {
+        address[5] memory treasuries = [address(0xA0), address(0xA1), address(0xA2), address(0xA3), address(0xA4)];
+        vm.expectRevert(LendingPool.ZeroAddress.selector);
+        new LendingPool(owner, address(0), attestor, escrow, treasuries);
+    }
+
+    function test_setTrustedAttestor_updatesAttestorAndRevertsOnZero() public {
+        vm.expectRevert(LendingPool.ZeroAddress.selector);
+        pool.setTrustedAttestor(address(0));
+
+        pool.setTrustedAttestor(address(0x9999));
+        assertEq(pool.trustedAttestor(), address(0x9999));
+    }
+
+    function test_setEscrowWallet_updatesEscrowAndRevertsOnZero() public {
+        vm.expectRevert(LendingPool.ZeroAddress.selector);
+        pool.setEscrowWallet(address(0));
+
+        pool.setEscrowWallet(address(0x9999));
+        assertEq(pool.escrowWallet(), address(0x9999));
+    }
+
+    function test_setTierTreasury_updatesTreasuryAndRevertsOnZero() public {
+        vm.expectRevert(LendingPool.ZeroAddress.selector);
+        pool.setTierTreasury(0, address(0));
+
+        pool.setTierTreasury(0, address(0x9999));
+        (,,,,, address treasury) = pool.pools(0);
+        assertEq(treasury, address(0x9999));
+    }
+
+    function test_tierAmount_returnsConfiguredAmounts() public view {
+        assertEq(pool.tierAmount(0), 200e6);
+        assertEq(pool.tierAmount(4), 600e6);
+    }
+
+    // --- validation reverts ---
+
+    function test_deposit_revertsOnZeroAmount() public {
+        vm.prank(lender1);
+        vm.expectRevert(LendingPool.ZeroAmount.selector);
+        pool.deposit(0, 0);
+    }
+
+    function test_deposit_revertsOnInvalidTier() public {
+        vm.prank(lender1);
+        vm.expectRevert(LendingPool.InvalidTier.selector);
+        pool.deposit(5, 100e6);
+    }
+
+    function test_withdraw_revertsOnZeroAmount() public {
+        vm.prank(lender1);
+        vm.expectRevert(LendingPool.ZeroAmount.selector);
+        pool.withdraw(0, 0);
+    }
+
+    function test_withdraw_revertsWhenExceedingDeposit() public {
+        _deposit(lender1, 0, 500e6);
+
+        vm.prank(lender1);
+        vm.expectRevert(LendingPool.ExceedsDeposit.selector);
+        pool.withdraw(0, 600e6);
+    }
+
+    function test_claimRewards_revertsWhenNothingToClaim() public {
+        vm.prank(lender1);
+        vm.expectRevert(LendingPool.NothingToClaim.selector);
+        pool.claimRewards(0);
+    }
+
+    function test_claimLoan_revertsOnBorrowerMismatch() public {
+        LendingPool.Attestation memory att = _buildAttestation(0, 1);
+        att.borrower = address(0x9999);
+        bytes memory sig = _signAttestation(att);
+
+        vm.prank(borrower);
+        vm.expectRevert(LendingPool.BorrowerMismatch.selector);
+        pool.claimLoan(att, sig);
+    }
+
+    function test_repayLoan_revertsWhenNotActive() public {
+        vm.expectRevert(LendingPool.LoanNotActive.selector);
+        pool.repayLoan(0);
+    }
+
+    function test_markDefault_revertsWhenNotActive() public {
+        vm.expectRevert(LendingPool.LoanNotActive.selector);
+        pool.markDefault(0);
+    }
 }

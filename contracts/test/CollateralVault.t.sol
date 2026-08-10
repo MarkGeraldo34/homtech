@@ -85,4 +85,28 @@ contract CollateralVaultTest is Test {
         vault.setTrustedRelayer(borrower);
         assertEq(vault.trustedRelayer(), borrower);
     }
+
+    function test_constructor_revertsOnZeroRelayer() public {
+        vm.expectRevert(CollateralVault.ZeroAddress.selector);
+        new CollateralVault(owner, address(0));
+    }
+
+    function test_setTrustedRelayer_revertsOnZeroAddress() public {
+        vm.expectRevert(CollateralVault.ZeroAddress.selector);
+        vault.setTrustedRelayer(address(0));
+    }
+
+    function test_unlockCollateral_revertsIfNotLocked() public {
+        vm.prank(relayer);
+        vm.expectRevert(CollateralVault.NotLocked.selector);
+        vault.unlockCollateral(bytes32(uint256(0xDEAD)));
+    }
+
+    function test_seizeCollateral_revertsOnZeroTreasury() public {
+        (, bytes32 depositId) = _lock();
+
+        vm.prank(relayer);
+        vm.expectRevert(CollateralVault.ZeroAddress.selector);
+        vault.seizeCollateral(depositId, address(0));
+    }
 }
