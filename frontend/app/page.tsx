@@ -2,11 +2,52 @@ import Link from "next/link";
 import { HowItWorks } from "@/components/HowItWorks";
 
 const FACTS = [
-  { label: "Loan sizes", value: "$200–$600" },
-  { label: "Interest", value: "15%" },
-  { label: "Term", value: "30 days" },
-  { label: "Collateral", value: "Your NFT" },
-];
+  { label: "Loan sizes", value: "$200–$600", icon: "loan" },
+  { label: "Interest", value: "15%", icon: "interest" },
+  { label: "Term", value: "30 days", icon: "term" },
+  { label: "Collateral", value: "Your NFT", icon: "collateral" },
+] as const;
+
+function FactIcon({ name }: { name: (typeof FACTS)[number]["icon"] }) {
+  const props = {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.5,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    className: "h-5 w-5",
+  };
+  switch (name) {
+    case "loan":
+      return (
+        <svg {...props}>
+          <path d="M12 2v20M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h7" />
+        </svg>
+      );
+    case "interest":
+      return (
+        <svg {...props}>
+          <path d="M6 18 18 6" />
+          <circle cx="7.5" cy="7.5" r="2" />
+          <circle cx="16.5" cy="16.5" r="2" />
+        </svg>
+      );
+    case "term":
+      return (
+        <svg {...props}>
+          <path d="M3.5 9h17M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" />
+          <path d="M8 3v4M16 3v4" />
+        </svg>
+      );
+    case "collateral":
+      return (
+        <svg {...props}>
+          <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3ZM9 12l2 2 4-4" />
+        </svg>
+      );
+  }
+}
 
 export default function Home() {
   return (
@@ -43,9 +84,16 @@ export default function Home() {
         </div>
 
         <div className="animate-fade-up grid grid-cols-2 gap-3 sm:gap-4" style={{ animationDelay: "0.1s" }}>
-          {FACTS.map((fact) => (
+          {FACTS.map((fact, i) => (
             <div key={fact.label} className="surface-card surface-card--hover p-5">
-              <p className="text-2xl sm:text-3xl font-semibold bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">
+              <span
+                className={`flex h-9 w-9 items-center justify-center rounded-full ${
+                  i % 2 === 0 ? "bg-accent/10 text-accent" : "bg-accent-2/10 text-accent-2"
+                }`}
+              >
+                <FactIcon name={fact.icon} />
+              </span>
+              <p className="mt-3 whitespace-nowrap text-xl sm:text-2xl font-bold leading-tight tracking-tight bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">
                 {fact.value}
               </p>
               <p className="mt-1 text-xs text-muted">{fact.label}</p>
