@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #fbfaff;
   --foreground: #171717;
   --surface: #f8f7fb;
   --border: #e5e1ee;
   --muted: #6b7280;
   --accent: #9333ea;
   --accent-2: #2b86d2;
+  --glow: #e8579e;
 }
 
 @theme inline {
@@ -25,9 +26,17 @@
 body {
   background-color: var(--background);
   background-image:
-    radial-gradient(900px circle at 12% -10%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 60%),
-    radial-gradient(900px circle at 88% 0%, color-mix(in srgb, var(--accent-2) 9%, transparent), transparent 60%),
-    radial-gradient(1200px circle at 50% 110%, color-mix(in srgb, var(--accent) 5%, transparent), transparent 60%);
+    radial-gradient(900px circle at 10% -12%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
+    radial-gradient(900px circle at 90% -8%, color-mix(in srgb, var(--accent-2) 15%, transparent), transparent 60%),
+    radial-gradient(700px circle at 50% -6%, color-mix(in srgb, var(--glow) 10%, transparent), transparent 55%),
+    radial-gradient(1200px circle at 50% 110%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 60%),
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--accent) 6%, var(--background)) 0%,
+      var(--background) 45%,
+      var(--background) 55%,
+      color-mix(in srgb, var(--accent-2) 6%, var(--background)) 100%
+    );
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
