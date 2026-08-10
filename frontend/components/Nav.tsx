@@ -12,17 +12,17 @@ export function Nav() {
   const pathname = usePathname();
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-border bg-surface/60 p-1">
+    <div className="flex items-center gap-2 sm:gap-1 sm:rounded-full sm:border sm:border-border sm:bg-surface/60 sm:p-1">
       {LINKS.map(({ href, label }) => {
         const active = pathname === href;
         return (
           <Link
             key={href}
             href={href}
-            className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
+            className={`rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors sm:border-0 ${
               active
-                ? "bg-gradient-to-r from-accent to-accent-2 text-white shadow-sm"
-                : "text-muted hover:text-foreground"
+                ? "border-transparent bg-gradient-to-r from-accent to-accent-2 text-white shadow-sm"
+                : "border-border text-muted hover:border-accent hover:text-foreground"
             }`}
           >
             {label}
