@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { ConnectButton } from "@/components/ConnectButton";
@@ -17,6 +17,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-wordmark",
+  subsets: ["latin"],
+  weight: ["600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "HomTech",
   description: "NFT-collateralized house rent lending on Arc Testnet",
@@ -27,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <div aria-hidden className="fixed inset-0 -z-10 overflow-hidden">
@@ -41,9 +47,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <Providers>
           <header className="sticky top-0 z-20 border-b border-border bg-background/75 backdrop-blur-md px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
-            <Link href="/" className="flex items-center gap-2 font-semibold whitespace-nowrap tracking-tight">
+            <Link href="/" className="flex items-center gap-2 whitespace-nowrap">
               <Image src="/logo.png" alt="" width={30} height={30} className="rounded-md" />
-              <span>
+              <span className="font-[family-name:var(--font-wordmark)] text-lg font-bold tracking-tight">
                 Hom<span className="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">Tech</span>
               </span>
             </Link>
